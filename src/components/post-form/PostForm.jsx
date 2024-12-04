@@ -8,34 +8,37 @@ import service from "../../appwrite/majorConfig";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-function PostForm({post}) {
+function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, getValues, control } =
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug:post?.slug || "",
-        content:post?.content || "",
-        status:post?.status || "active",
+        slug: post?.slug || "",
+        content: post?.content || "",
+        status: post?.status || "active",
       },
     });
 
-    const navigate= useNavigate();
-    const userData= useSelector( state => state.user.userData);
+  const navigate = useNavigate();
+  const userData = useSelector((state) => state.user.userData);
 
-    const submit = async(data)=>{
+  const submit = async (data) => {
+    if (post) {
+      const file = data.image[0] ? service.uploadFile(data.image[0]) : null;
 
-      if(post){
-        const file = data.image[0] ? service.uploadFile(data.image[0]): null
+      if (file) {
+        service.deleteFile(post.requiredImage);
       }
 
-      if(file){
-        service.deleteFile(post.requiredImage)
+      const dbPost = await service.updatePost(post.$id, {
+        ...data,
+        requiredImage: file ? file.$id : undefined,
+      });
+      if (dbPost) {
+        navigate(`/post/${dbPost.$id}`);
       }
-
-      const dbPost= await service.up
     }
-
-    
+  };
 
   return <div>PostForm</div>;
 }
