@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import appwriteService from "../appwrite/config";
-import { Button, Container } from "../components";
-import parse from "html-react-parser";
+import service from "../appwrite/majorConfig";
+import { Button } from "../components/index";
+import Container from "../components/container/Container";
+import parse from "node-html-parser";
 import { useSelector } from "react-redux";
 
 export default function Post() {
@@ -16,7 +17,7 @@ export default function Post() {
 
     useEffect(() => {
         if (slug) {
-            appwriteService.getPost(slug).then((post) => {
+            service.getPost(slug).then((post) => {
                 if (post) setPost(post);
                 else navigate("/");
             });
