@@ -113,7 +113,7 @@ function PostForm({ post }) {
               />
           </div>
       )}
-      <Select
+      <SelectBtn
           options={["active", "inactive"]}
           label="Status"
           className="mb-4"
