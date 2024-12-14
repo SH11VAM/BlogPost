@@ -14,9 +14,9 @@ export class Service {
         this.bucket = new Storage(this.client);
     }
 
-    async createPost({ title, slug, content, requiredImage, status, userId }) {
+    async createPost({ title, slug, content, requiredimage, status, userId }) {
         try {
-            return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, { title, content, status, requiredImage, userId })
+            return await this.databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, { title, content, status, requiredimage, userId })
 
         } catch (error) {
             console.log("Appwrite createPost Error :: ", error);
@@ -24,9 +24,9 @@ export class Service {
 
     }
 
-    async updatePost(slug, { title, content, requiredImage, status }) {
+    async updatePost(slug, { title, content, requiredimage, status }) {
         try {
-            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, { title, content, status, requiredImage })
+            return await this.databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollectionId, slug, { title, content, status, requiredimage })
 
         } catch (error) {
             console.log("Appwrite updatePost Error :: ", error);
@@ -102,11 +102,11 @@ export class Service {
 
     }
 
-    async getFilePreview(fileID){
+    async getFilePreview(requiredimage){
 
         return this.bucket.getFilePreview(
             conf.appwriteBucketId,
-            fileID
+            requiredimage
         )
     }
 

@@ -8,6 +8,7 @@ import service from "../../appwrite/majorConfig";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+
 function PostForm({ post }) {
   const { register, handleSubmit, watch, setValue, getValues, control } =
     useForm({
@@ -20,33 +21,44 @@ function PostForm({ post }) {
     });
 
   const navigate = useNavigate();
-  const userData = useSelector((state) => state.user.userData);
+  const userData = useSelector((state) => state.auth.userData);
 
   const submit = async (data) => {
+    console.log(data);
+
+    
     if (post) {
       const file = data.image[0] ? service.uploadFile(data.image[0]) : null;
 
       if (file) {
-        service.deleteFile(post.requiredImage);
+        service.deleteFile(post.requiredimage);
       }
 
       const dbPost = await service.updatePost(post.$id, {
         ...data,
-        requiredImage: file ? file.$id : undefined,
+        requiredimage: file ? file.$id : undefined,
       });
       if (dbPost) {
         navigate(`/post/${dbPost.$id}`);
       }
     } else {
+
       const file = await service.uploadFile(data.image[0]);
+      console.log(file);
 
       if (file) {
         const fileId = file.$id;
-        data.requiredImage = fileId;
+        data.requiredimage = fileId;
         const dbPost = await service.createPost({
-          ...data,
+          title:data.title,
+          slug:data.slug,
+          content:data.content,
+          requiredimage:data.requiredimage,
+          status:data.status,
           userId: userData.$id,
         });
+console.log(dbPost);
+
         if (dbPost) {
           navigate(`/post/${dbPost.$id}`);
         }
@@ -55,12 +67,11 @@ function PostForm({ post }) {
   };
 
   const slugTransform = useCallback((value) => {
-    if (value && typeof value === "string") {
+    if (value) {
       return value
         .trim()
         .toLowerCase()
-        .replace(/^[a-zA-Z\d\s]+/g, "-")
-        .replace(/\s/g, "-");
+        .replace(/\s+/g, "-"); // Replace one or more spaces with a single dash
     }
     return "";
   }, []);
@@ -105,9 +116,9 @@ function PostForm({ post }) {
           {...register("image", { required: !post })}
       />
       {post && (
-          <div className="w-full mb-4">
+          <div className="w-1/2 mb-4">
               <img
-                  src={appwriteService.getFilePreview(post.featuredImage)}
+                  src={appwriteService.getFilePreview(post.requiredimage)}
                   alt={post.title}
                   className="rounded-lg"
               />
@@ -119,7 +130,7 @@ function PostForm({ post }) {
           className="mb-4"
           {...register("status", { required: true })}
       />
-      <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
+      <Button type="submit"  bgColor={post ? "bg-green-500" : undefined} className="w-full">
           {post ? "Update" : "Submit"}
       </Button>
   </div>

@@ -6,11 +6,13 @@ import PostCard from "../components/PostCard";
 function Home() {
   const [post, setPost] = useState([]);
   useEffect(() => {
-    service.getPost().then((post) => {
-      if (post) {
-        setPost(post.documents);
-      }
-    });
+    if (service.getPost) {
+      service.getPost().then((post) => {
+        if (post) {
+          setPost(post.documents);
+        }
+      });
+    }
   }, []);
 
   return post.length > 0 ? (

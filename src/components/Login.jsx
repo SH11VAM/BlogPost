@@ -18,6 +18,7 @@ function Login() {
     setError("");
     try {
       const session = await authservice.login(data);
+     
       if (session) {
         const userData = await authservice.getcurrentUser();
         if (userData) {
@@ -65,8 +66,8 @@ function Login() {
                 required: true,
                 validate: {
                   matchPattern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.text(value) ||
-                    "Enter the Valid Email ",
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
+                    "Enter a valid email",
                 },
               })}
             />
@@ -78,7 +79,9 @@ function Login() {
                 required: true,
               })}
             />
-            <Button type="submit" className="w-full">SignIN</Button>
+            <Button type="submit" className="w-full">
+              SignIN
+            </Button>
           </div>
         </form>
       </div>

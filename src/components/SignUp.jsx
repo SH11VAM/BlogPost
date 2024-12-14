@@ -67,19 +67,18 @@ function SignUp() {
               })}
             />
 
-            <Input
-              label="Email: "
-              type="email"
-              placeholder="Enter your email"
-              {...register("email", {
-                required: true,
-                validate: {
-                  matchPattern: (value) =>
-                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.text(value) ||
-                    "Enter the Valid Email ",
-                },
-              })}
-            />
+<Input
+  label="Email: "
+  type="email"
+  placeholder="Enter your email"
+  {...register("email", {
+    required: true,
+    validate: {
+      matchPattern: (value) =>
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) || "Enter a valid email",
+    },
+  })}
+/>
 
             <Input
               label="Password :"

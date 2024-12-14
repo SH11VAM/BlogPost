@@ -12,10 +12,10 @@ function Header() {
 
   const navItem = [
     { name: "Home", slug: "/", active: true },
-    { name: "Login", slug: "/login", active: !authStatus },
-    { name: "SignUp", slug: "/signup", active: !authStatus },
-    { name: "All Post", slug: "/all-post", active: authStatus },
-    { name: "Add Post", slug: "/add-post", active: authStatus },
+    { name: "Login", slug: "login", active: !authStatus },
+    { name: "SignUp", slug: "signup", active: !authStatus },
+    { name: "All Post", slug: "all-post", active: authStatus },
+    { name: "Add Post", slug: "add-post", active: authStatus },
   ];
 
   return (
