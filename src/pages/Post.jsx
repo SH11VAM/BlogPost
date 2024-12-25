@@ -3,12 +3,13 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import service from "../appwrite/majorConfig";
 import { Button } from "../components/index";
 import Container from "../components/container/Container";
-import parse from "node-html-parser/dist/parse";
+import parse from 'html-react-parser';
 import { useSelector } from "react-redux";
 
 export default function Post() {
   const [post, setPost] = useState(" ");
   const [url, setUrl] = useState("No url");
+  const [content , setContent]= useState(" ");
   const { slug } = useParams();
   const navigate = useNavigate();
 
@@ -16,16 +17,29 @@ export default function Post() {
 
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
+  async function ImageUrl(post) {
+    const imageurl = await service.getFilePreview(post?.requiredimage, {
+      width: 300,
+      heigth: 200,
+    });
+    if (imageurl) {
+      setUrl(imageurl);
+    }
+  }
+
+  async function GetPost(slug) {
+    const Post = await service.getPost(slug);
+    ImageUrl(Post);
+    Post ? setPost(Post): <div> ------No Post Yet----- </div>
+
+    const article =  parse(Post.content).props.children;
+    article ? setContent(article) : "Please wait "
+  }
+
   useEffect(() => {
     if (slug) {
-      service
-        .getPost(slug)
-        .then((post) => (post ? setPost(post) : <div>NO Set Post</div>));
+      GetPost(slug);
     } else navigate("/");
-
-    service.getFilePreview(post?.requiredimage).then((URL) => {
-      setUrl(URL);
-    });
   }, [slug, navigate]);
 
   const deletePost = () => {
@@ -46,6 +60,7 @@ export default function Post() {
             alt={post.title}
             className="rounded-xl w-1/2 h-96 border border-black p-2 object-cover"
             loading="lazy"
+            placeholder="blur"
           />
 
           {isAuthor && (
@@ -64,7 +79,7 @@ export default function Post() {
         <div className="w-full mb-6">
           <h1 className="text-2xl font-bold">{post.title}</h1>
         </div>
-        <div className="browser-css">{}</div>
+        <div >{content}</div>
       </Container>
     </div>
   ) : (

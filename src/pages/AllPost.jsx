@@ -21,8 +21,6 @@ function AllPost() {
   
   }, []);
 
-  console.log(post);
-
   return (
     <div className="w-full py-8">
       <Container>

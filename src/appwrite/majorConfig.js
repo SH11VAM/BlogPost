@@ -102,11 +102,11 @@ export class Service {
 
     }
 
-    async getFilePreview(requiredimage){
+    async getFilePreview(fileID){
 
         return this.bucket.getFilePreview(
             conf.appwriteBucketId,
-            requiredimage
+            fileID
         )
     }
 
